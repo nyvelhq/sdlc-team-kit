@@ -1,5 +1,5 @@
 {
-  "description": "sdlc-team-kit guardrails: protected branches, design gate on story branches, secrets and locked tests",
+  "description": "sdlc-team-kit guardrails: protected branches (git and GitHub tools), no agent merges, design gate on story branches, secrets and locked tests",
   "hooks": {
     "PreToolUse": [
       {
@@ -8,7 +8,9 @@
           {
             "type": "command",
             "command": "node",
-            "args": ["${CLAUDE_PLUGIN_ROOT}/scripts/guard.mjs"],
+            "args": [
+              "${CLAUDE_PLUGIN_ROOT}/scripts/guard.mjs"
+            ],
             "timeout": 15
           }
         ]
@@ -19,7 +21,22 @@
           {
             "type": "command",
             "command": "node",
-            "args": ["${CLAUDE_PLUGIN_ROOT}/scripts/guard.mjs"],
+            "args": [
+              "${CLAUDE_PLUGIN_ROOT}/scripts/guard.mjs"
+            ],
+            "timeout": 15
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__.*github.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PLUGIN_ROOT}/scripts/guard.mjs"
+            ],
             "timeout": 15
           }
         ]

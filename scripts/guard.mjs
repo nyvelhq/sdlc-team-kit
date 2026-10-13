@@ -5,6 +5,7 @@
 //   1. No pushes or commits to protected branches, no force-pushes.
 //   2. The design gate when a story branch claude/<ID>.<n> is created.
 //   3. No edits to secret files, or to tests locked during a bug fix.
+//   4. The same branch rules for GitHub MCP tools: no file writes to protected branches, no merges.
 import { execFileSync } from "node:child_process";
 import { readFileSync, existsSync } from "node:fs";
 import { resolve, relative, basename, isAbsolute } from "node:path";
@@ -41,28 +42,30 @@ function tokens(seg) {
   return (seg.match(/"[^"]*"|'[^']*'|\S+/g) || []).map((t) => t.replace(/^['"]|['"]$/g, ""));
 }
 
-// Return [gitSubcommand, argsAfterSubcommand] or null. Skips git global options like -C <dir>, -c k=v.
-function parseGit(tok) {
+// Return [gitSubcommand, argsAfterSubcommand, dir] or null. Skips git global options like -c k=v;
+// dir is where git runs, following -C <dir> (relative to cwd, and to each other, as git does).
+function parseGit(tok, cwd) {
   let i = tok.findIndex((t) => t === "git" || t.endsWith("/git"));
   if (i === -1) return null;
   i++;
+  let dir = cwd;
   while (i < tok.length && tok[i].startsWith("-")) {
+    if (tok[i] === "-C" && i + 1 < tok.length) dir = resolve(dir, tok[i + 1]);
     if (["-C", "-c", "--git-dir", "--work-tree", "--namespace"].includes(tok[i])) i++;
     i++;
   }
   if (i >= tok.length) return null;
-  return [tok[i], tok.slice(i + 1)];
+  return [tok[i], tok.slice(i + 1), dir];
 }
 
 function checkBash(command, cwd) {
-  const prot = protectedBranches(cwd);
-  const current = git(cwd, ["rev-parse", "--abbrev-ref", "HEAD"]);
-  const root = git(cwd, ["rev-parse", "--show-toplevel"]) || cwd;
-
   for (const seg of segments(command)) {
-    const parsed = parseGit(tokens(seg));
+    const parsed = parseGit(tokens(seg), cwd);
     if (!parsed) continue;
-    const [sub, args] = parsed;
+    const [sub, args, dir] = parsed;
+    const prot = protectedBranches(dir);
+    const current = git(dir, ["rev-parse", "--abbrev-ref", "HEAD"]);
+    const root = git(dir, ["rev-parse", "--show-toplevel"]) || dir;
 
     if (sub === "push") {
       if (args.some((a) => a === "-f" || a === "--force" || a.startsWith("--force-with-lease") || a === "--mirror" || /^\+/.test(a) || /^-[a-zA-Z]*f/.test(a))) {
@@ -136,6 +139,30 @@ function checkEdit(filePath, cwd) {
   }
 }
 
+// GitHub MCP tools write to GitHub directly, so git hooks and the checks above never see them.
+// Tool names look like mcp__github__push_files or mcp__plugin_github_github__push_files.
+const GITHUB_WRITES = new Set(["push_files", "create_or_update_file", "delete_file"]);
+const GITHUB_MERGES = new Set(["merge_pull_request", "enable_pr_auto_merge"]);
+
+function checkGithubTool(toolName, ti, cwd) {
+  const m = /^mcp__.*github.*__([a-z_]+)$/i.exec(toolName);
+  if (!m) return;
+  const op = m[1];
+  if (GITHUB_MERGES.has(op)) {
+    block("Agents never merge pull requests or turn on auto-merge. Leave the PR for the approver to merge.");
+  }
+  if (GITHUB_WRITES.has(op)) {
+    const branch = String(ti.branch || "").replace(/^refs\/heads\//, "");
+    if (!branch) {
+      block(`${op} without a branch writes to the repository's default branch. Name a claude/<id> branch.`);
+    }
+    // Only this repo's default branch is known locally; for other repos the fixed list applies.
+    if (protectedBranches(cwd).has(branch)) {
+      block(`Writing to protected branch "${branch}" is not allowed. Use a claude/<id> branch and open a PR; the approver merges.`);
+    }
+  }
+}
+
 let raw = "";
 process.stdin.setEncoding("utf8");
 process.stdin.on("data", (c) => (raw += c));
@@ -150,5 +177,6 @@ process.stdin.on("end", () => {
   const ti = input.tool_input || {};
   if (input.tool_name === "Bash") checkBash(String(ti.command || ""), cwd);
   else if (["Edit", "Write", "MultiEdit", "NotebookEdit"].includes(input.tool_name)) checkEdit(ti.file_path || ti.notebook_path, cwd);
+  else checkGithubTool(String(input.tool_name || ""), ti, cwd);
   process.exit(0);
 });
