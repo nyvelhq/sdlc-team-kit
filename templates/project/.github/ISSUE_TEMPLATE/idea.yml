@@ -1,0 +1,32 @@
+name: Idea
+description: A new feature or change for the agent team to take from requirements to a pull request.
+title: "Idea: "
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: The idea
+      description: In your own words. What should be possible that isn't today?
+    validations:
+      required: true
+  - type: textarea
+    id: who
+    attributes:
+      label: Who is it for?
+      description: Which user role(s)? Say "not sure" if you don't know.
+  - type: textarea
+    id: why
+    attributes:
+      label: Why now?
+      description: Optional. What prompted it, what it unblocks.
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything else
+      description: Optional. Must-haves, things to avoid, links, screenshots.
+  - type: markdown
+    attributes:
+      value: >-
+        To start it, tell Claude `/idea #<this issue number>`. The team
+        writes the brief and mockups and waits for design approval before
+        any code.

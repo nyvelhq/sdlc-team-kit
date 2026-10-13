@@ -9,7 +9,7 @@
     {
       "name": "sdlc-team-kit",
       "source": "./",
-      "description": "Virtual SDLC team: role agents, phase skills, and document templates."
+      "description": "Design-first agent team with two human gates (design approval, merge) and evidence-based QA."
     }
   ]
 }

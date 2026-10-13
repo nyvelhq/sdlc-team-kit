@@ -2,7 +2,7 @@
   "name": "sdlc-team-kit",
   "displayName": "SDLC Team Kit",
   "version": "0.1.0",
-  "description": "A virtual SDLC team for Claude Code: role agents (PM, BA, architect, engineer, QA, security, DevOps) plus phase skills that produce PRDs, user stories, ADRs, test plans, defect reports, risk registers, release checklists, status reports, runbooks, and postmortems from shared templates.",
+  "description": "A design-first agent team: idea → brief → design → (architecture) → build → code and security review → QA → draft PR, with two human gates (design approval, merge) and 'missing evidence = blocked'. /kit-init installs the process docs and templates into a repo.",
   "author": {
     "name": "Nyvel",
     "url": "https://github.com/nyvelhq"
