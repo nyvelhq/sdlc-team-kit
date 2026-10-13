@@ -93,6 +93,7 @@ Prompts are advice; these hold even if an agent ignores its instructions. The pl
 | Blocked | Why |
 |---|---|
 | `git push` to `main`, `master`, `staging`, `production` or the remote default branch; commits made directly on them; any force-push | Only `claude/<id>` branches and PRs; the approver merges |
+| GitHub MCP tools (`push_files`, `create_or_update_file`, `delete_file`) writing to those branches or to no named branch; `merge_pull_request` and `enable_pr_auto_merge` | The same rule when an agent goes through the GitHub API instead of `git` |
 | Creating a story branch `claude/<ID>.<n>` when the brief needs a design and its last approval line isn't for the current `**Version:**` | Gate 1 — no code before design approval |
 | Writing `.env*` (except `.env.example`), `*.pem`, `*.key`, SSH keys, `secrets/` | Agents never write secrets |
 | Editing a bug's failing test listed in `.claude/sdlc-locks/tests` | Fix the code, not the test |

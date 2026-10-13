@@ -81,6 +81,28 @@ test("blocks protected push hidden in a compound command or behind -C", () => {
   assert.equal(bash(d, "git -C . push origin main").code, 2);
 });
 
+test("-C <dir> checks the branch of that directory, not the current one", () => {
+  const work = repo();
+  const onMain = repo("main");
+  assert.equal(bash(work, `git -C ${onMain} push`).code, 2);
+  assert.equal(bash(work, `git -C ${onMain} commit -m "x"`).code, 2);
+  assert.equal(bash(onMain, `git -C ${work} push`).code, 0);
+});
+
+test("GitHub MCP tools: no writes to protected branches, no merges", () => {
+  const d = repo();
+  const gh = (op, input) => run(d, `mcp__github__${op}`, input).code;
+  assert.equal(gh("push_files", { branch: "main", files: [] }), 2);
+  assert.equal(gh("create_or_update_file", { branch: "refs/heads/main", path: "a" }), 2);
+  assert.equal(gh("delete_file", { path: "a" }), 2, "no branch means the default branch");
+  assert.equal(gh("merge_pull_request", { pullNumber: 1 }), 2);
+  assert.equal(gh("enable_pr_auto_merge", { pullNumber: 1 }), 2);
+  assert.equal(run(d, "mcp__plugin_github_github__merge_pull_request", { pullNumber: 1 }).code, 2);
+  assert.equal(gh("push_files", { branch: "claude/work", files: [] }), 0);
+  assert.equal(gh("create_pull_request", { head: "claude/work", base: "main" }), 0);
+  assert.equal(gh("pull_request_read", { pullNumber: 1 }), 0);
+});
+
 test("allows normal work on a claude branch", () => {
   const d = repo();
   assert.equal(bash(d, "git push -u origin claude/work").code, 0);
