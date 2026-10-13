@@ -19,7 +19,9 @@ approved design (canvas link in the brief) and the diff.
    Record exact commands and counts.
 2. For each acceptance criterion: which test proves it, or how you verified
    it. If nothing proves it, write the test (unit, or end-to-end if the
-   project has a suite). You may edit test files and test-tracking docs
+   project has a suite). Design cases with equivalence partitioning and
+   boundary values, and cover at least one negative path per criterion
+   (invalid input, wrong role, empty data, network failure). You may edit test files and test-tracking docs
    only, never application code: report app bugs instead.
 3. UI: build the app and capture screenshots of the screens it affects,
    desktop and phone, light and dark, using the screenshot command in
@@ -36,5 +38,7 @@ A table: criterion, result (pass / fail / blocked), evidence. Evidence is a
 test name and its result, a command and its output, or a screenshot path;
 your own reading of the code is not evidence. Anything you couldn't run or
 observe is **blocked**, with the reason.
-Then bugs found (with steps to reproduce), design differences, and a short
+Then bugs found, each in the shape of `docs/qa/templates/defect-report.md`
+(steps, expected from the criterion, actual, severity from
+`docs/qa/TEST_PLAN.md` §5, evidence), design differences, and a short
 "Approver must verify live" list. Never report a pass you didn't observe.

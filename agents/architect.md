@@ -20,7 +20,11 @@ the access-rule tests, the data-access layer, and the brief you are given.
 2. In the brief's stories, the migration each one needs (next free number
    in the project's migrations folder), the access rules it adds or changes,
    and the tests that must prove them.
-3. A short note to the lead: risks, anything that needs the approver (cost,
+3. For changes to auth, access rules or personal data, a short STRIDE pass
+   (spoofing, tampering, repudiation, information disclosure, denial of
+   service, elevation of privilege) in the ADR's Consequences.
+4. Any Medium or High risk added to `docs/agent/RISKS.md`.
+5. A short note to the lead: risks, anything that needs the approver (cost,
    a new service, personal data), and anything you could not verify.
 
 ## Rules

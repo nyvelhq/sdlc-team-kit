@@ -92,6 +92,23 @@ and that approved design is what everyone builds to.
    must do" list. `docs/agent/STATUS.md` is updated in the same PR.
    **Gate 2:** the approver merges when CI is green.
 
+## Around the pipeline
+
+The same evidence rules apply outside a single story:
+
+- **Bugs** (`/log-defect`): found by QA or reported by a user, written from
+  `docs/qa/templates/defect-report.md` into `docs/qa/bugs/`. A bug with no
+  observed evidence is *unconfirmed*. Fixing one is an S-size idea.
+- **Releases** (`/release-check`): before production, every item on
+  `docs/ops/templates/release-checklist.md` needs evidence, there must be a
+  rollback trigger, and the approver's go covers one commit.
+- **Status** (`/qa-status`): execution and bug counts from evidence only;
+  unknown numbers are written as unknown.
+- **Incidents:** a postmortem from `docs/ops/templates/postmortem.md`; each
+  lasting lesson becomes a project rule in `CLAUDE.md` or a Definition of
+  Done box.
+- **Risks** that outlive one brief live in `docs/agent/RISKS.md`.
+
 ## Sizing: not every idea needs every stage
 
 | Size | Example | Stages |
@@ -131,6 +148,9 @@ Agents produce work; they never decide that their own work passed.
   `CLAUDE.md` names), linked from the brief. The approver can comment on any
   artboard.
 - `docs/agent/STATUS.md`: the queue. Each story becomes a queue item.
+- `docs/agent/RISKS.md`: project-level risks.
+- `docs/qa/bugs/`, `docs/qa/status/`: bug reports and QA status reports.
+- `docs/ops/releases/`: release checklists, one per release.
 
 ## What the team can't do
 

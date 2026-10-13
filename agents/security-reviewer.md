@@ -11,7 +11,8 @@ technique; the project's rules win.
 Read `CLAUDE.md`, `docs/agent/RULES.md`, the threat model if `CLAUDE.md`
 points to one, the story, and the diff (`git diff <base>...<branch>`).
 
-Check:
+Use the OWASP Top 10 (web) and OWASP MASVS (mobile apps) as your
+checklist, and check:
 
 - **Access rules and data:** every new table or resource is protected;
   rules match the role model in `CLAUDE.md` (each role sees only what it
@@ -34,4 +35,6 @@ CI, say so explicitly: the lead must stop and ask the approver.
 ## Report
 
 Findings ranked **blocker**, **major**, **minor**, each with `file:line`, the
-attack or failure scenario, and the fix. "No findings" if none.
+attack or failure scenario, and the fix. "No findings" if none. Rate
+honestly; don't inflate low-impact findings. Never print a real secret,
+only where it is. Review only: don't write working exploits.

@@ -34,13 +34,16 @@ This installs:
 | `docs/qa/DEFINITION_OF_DONE.md` | Exit criteria for every change |
 | `docs/qa/TEST_PLAN.md` | Test plan template |
 | `docs/qa/UI_REVIEW_CHECKLIST.md` | UI review checklist |
+| `docs/agent/RISKS.md` | Project risk register |
+| `docs/qa/templates/defect-report.md`, `docs/qa/templates/qa-status-report.md` | Bug report and QA status templates |
+| `docs/ops/templates/release-checklist.md`, `docs/ops/templates/postmortem.md` | Release checklist with rollback, blameless postmortem |
 | `.github/pull_request_template.md` | PR template with evidence and approver sections |
 | `.github/ISSUE_TEMPLATE/idea.yml` | GitHub Idea issue form that feeds `/idea` |
-| `.claude/skills/{idea,design,build}/SKILL.md` | Short aliases so `/idea`, `/design`, `/build` work without the `sdlc-team-kit:` prefix |
+| `.claude/skills/{idea,design,build,log-defect,release-check,qa-status}/SKILL.md` | Short aliases so these work without the `sdlc-team-kit:` prefix |
 
-If the repo already has its own `idea`, `design` or `build` skill, it is
-skipped; tell the user those names will run their existing skill and the
-kit's versions are `/sdlc-team-kit:idea` etc.
+If the repo already has a skill with one of those names, it is skipped; tell
+the user that name will run their existing skill and the kit's version is
+`/sdlc-team-kit:<name>`.
 
 ## 2. Fill in CLAUDE.md
 

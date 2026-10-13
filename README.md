@@ -39,7 +39,7 @@ To try the plugin without installing it: `claude --plugin-dir /path/to/sdlc-team
 
 ## Commands
 
-After `kit-init`, the short names below work in that repo. The plugin's own names are `/sdlc-team-kit:idea`, `/sdlc-team-kit:design` and `/sdlc-team-kit:build`.
+After `kit-init`, the short names below work in that repo. The plugin's own names carry the prefix, e.g. `/sdlc-team-kit:idea`.
 
 | Command | What it does |
 |---|---|
@@ -48,6 +48,9 @@ After `kit-init`, the short names below work in that repo. The plugin's own name
 | `/design <ID> [feedback]` | Revises the mockups (v2, v3, …) and withdraws any earlier approval |
 | `/design <ID> approve` | Records `Design v<N> approved by <approver> on <date>` in the brief — only on the approver's own words |
 | `/build <story-id>` | Engineer → parallel code and security review (max two rounds) → QA → draft PR; waits for CI; never merges |
+| `/log-defect <what happened>` | Reproducible bug report in `docs/qa/bugs/`; no observed evidence = *unconfirmed* |
+| `/release-check <version>` | Audits one release commit against the checklist; needs a rollback trigger; recommends go / no-go; never deploys |
+| `/qa-status <period>` | QA status report from evidence only; unknown numbers stay unknown |
 
 ## Agents
 
@@ -76,9 +79,12 @@ Reviewers and QA get the story and the branch, never the engineer's reasoning.
 | `docs/qa/DEFINITION_OF_DONE.md` | Exit criteria |
 | `docs/qa/TEST_PLAN.md` | Test plan |
 | `docs/qa/UI_REVIEW_CHECKLIST.md` | UI review checklist |
+| `docs/agent/RISKS.md` | Project risk register |
+| `docs/qa/templates/` | Defect report, QA status report |
+| `docs/ops/templates/` | Release checklist with rollback plan, blameless postmortem |
 | `.github/pull_request_template.md` | PR template with evidence table and approver sign-off |
 | `.github/ISSUE_TEMPLATE/idea.yml` | GitHub Idea issue form that feeds `/idea` |
-| `.claude/skills/{idea,design,build}/` | Short aliases for the plugin's skills |
+| `.claude/skills/` | Short aliases for the plugin's skills |
 
 ## The rules that don't bend
 
