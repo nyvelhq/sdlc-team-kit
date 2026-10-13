@@ -27,7 +27,7 @@ paths for current behaviour.>
 
 ### <ID>.1 — <title>
 - **Story:** As a <role>, I want <capability> so that <benefit>.
-- **Size:** S / M / L · **Depends on:** —
+- **Type:** feature / bug · **Size:** S / M / L · **Depends on:** —
 - **Acceptance criteria:**
   1. Given <context>, when <action>, then <observable result>.
   2.
@@ -39,7 +39,8 @@ paths for current behaviour.>
 ## 5. Triggers
 
 - Architect needed (data model, access rules, integration, data flow): yes / no — why
-- Designer needed (a user sees it): yes / no
+- Designer needed (a user sees it): yes / no   <!-- keep this exact wording; the design gate reads it -->
+
 - Flag for the approver (auth, payments, personal data): yes / no — why
 
 ## 6. Assumptions
@@ -54,15 +55,20 @@ paths for current behaviour.>
 
 -
 
+## Brief review
+
+<!-- Filled by the lead from qa-engineer's brief review: PASS, or the blocking issues and how they were fixed. -->
+
 ## Design
 
-<!-- Filled by product-designer: canvas link, version (v1, v2, …), what each pass contains, key decisions, design questions. -->
+<!-- Filled by product-designer: a line "**Version:** v<N>" (bumped on every revision; the gate reads the last one), the canvas link, what each pass contains, key decisions, design questions. -->
 
 ## Approval
 
-<!-- Only the lead writes this, only on the approver's own words:
+<!-- Only the lead writes this, only on the approver's own words, one line per event, exactly:
 Design v<N> approved by <approver> on <YYYY-MM-DD> — <canvas link>
-If the design changes afterwards: Approval withdrawn: design changed to v<N> -->
+Approval withdrawn: design changed to v<N>
+The plugin's hook reads the last line: no code branch for a UI story until it approves the current version. -->
 
 ## Pull requests
 

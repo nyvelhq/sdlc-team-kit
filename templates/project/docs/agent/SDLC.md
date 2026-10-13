@@ -47,7 +47,10 @@ and that approved design is what everyone builds to.
    approver can answer (pricing, legal, brand, money) stops the run and is
    asked; anything else is decided and written down as an assumption. Large
    ideas are split into stories `<ID>.1`, `<ID>.2`, … each small enough for
-   one PR.
+   one PR. Before design starts, the QA engineer reviews the brief for
+   testability (vague criteria, missing negative paths, scope gaps, clashes
+   with past ADRs); failures go back to the analyst, at most twice, then to
+   the approver.
 2. **Experience design**, for anything a person will see: a feature, a
    website, a web app or a mobile app. The designer takes its time and works
    in three passes, all on one design canvas the approver can open, click
@@ -78,7 +81,9 @@ and that approved design is what everyone builds to.
    feedback changes the flows, the ADR is updated before approval.
 4. **Build** (`/build <story-id>`): the engineer implements one story on
    `claude/<story-id>`, matching existing patterns and the approved design,
-   with unit tests, and runs the checks listed in `CLAUDE.md`.
+   with unit tests, and runs the checks listed in `CLAUDE.md`. A bug story
+   goes test-first: the failing test is committed alone and shown to fail,
+   then locked while the engineer fixes the code.
 5. **Review:** the code reviewer and the security reviewer run in parallel.
    Blocking findings go back to the engineer. After two rounds anything
    still open is reported in the PR, not hidden.
@@ -138,6 +143,23 @@ Agents produce work; they never decide that their own work passed.
 - **The record is GitHub plus the brief.** Pull requests, CI runs, and
   environment approvals carry who, what and when; the brief carries the
   design approvals. No second log to keep in sync.
+
+## What is enforced, not just asked
+
+Instructions to agents are advice; these rules are checked by code, so they
+hold even when a prompt is ignored:
+
+| Rule | Enforced by |
+|---|---|
+| No push or commit to protected branches (`main`, `master`, `staging`, `production`, the remote default); no force-push | Plugin hook on every shell command, plus deny rules in `.claude/settings.json` |
+| No story branch `claude/<ID>.<n>` for a UI story until the brief approves the current design version | Plugin hook (design gate) and `scripts/gate.mjs` in `/build` |
+| No writes to `.env`, key or secrets files | Plugin hook, plus deny rules |
+| No edits to a bug's failing test while it is locked | Plugin hook reading `.claude/sdlc-locks/tests` |
+| Merge only by the approver | Branch protection on GitHub (set it up: require a PR and passing checks on the default branch) |
+
+The hooks match the commands agents normally write. They are a guardrail,
+not a security boundary: someone determined can work around them, which is
+why the merge gate stays with a human and branch protection.
 
 ## Where things live
 

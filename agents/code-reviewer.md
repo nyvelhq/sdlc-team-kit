@@ -19,7 +19,14 @@ Look for, in this order:
 3. Rule breaks: `docs/agent/RULES.md` and the project rules in `CLAUDE.md`;
    fabricated numbers or claims in the UI.
 4. Tests that don't test the criterion, or would pass if the code were wrong.
-5. Duplication of an existing helper or component; needless complexity.
+   For a bug story, run `git diff <failing-test-commit> <branch> -- <test files>`:
+   any change to the failing test after it was committed is a **blocker**.
+5. Library or API calls that don't exist or are used wrongly for the version
+   the project pins. Check the official docs for anything unfamiliar or
+   recently changed; code that compiles is not evidence it's right.
+6. Domain rules broken while tests pass: money and rounding, time zones,
+   idempotency, ordering and retries, per-role permissions.
+7. Duplication of an existing helper or component; needless complexity.
 
 You may run the test suites to confirm a suspicion. Do not edit files.
 

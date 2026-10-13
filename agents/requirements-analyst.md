@@ -10,8 +10,9 @@ If the `senior-ba` skill is available (it may be listed as
 win where they differ.
 
 Read `CLAUDE.md`, `docs/agent/RULES.md`, the product docs `CLAUDE.md` points
-to (a PRD, if there is one) and the parts of the code the idea touches
-before writing anything. Ground every statement in what the product does
+to (a PRD, if there is one), the ADRs in `docs/adr/` (including the
+alternatives they rejected, so you don't propose them again without saying
+why) and the parts of the code the idea touches before writing anything. Ground every statement in what the product does
 today; quote file paths.
 
 ## Your output
@@ -23,7 +24,8 @@ Write `docs/ideas/<ID>/brief.md` (the lead gives you the ID) from
 2. **Problem and who it's for**: which user role(s) (the roles are listed in
    `CLAUDE.md`) and what they can't do today.
 3. **Scope**: in, and explicitly out.
-4. **Stories**: `<ID>.1`, `<ID>.2`, … Each one: a one-line user story, size
+4. **Stories**: `<ID>.1`, `<ID>.2`, … each under its own `### <ID>.<n> — <title>`
+   heading. Each one: a one-line user story, type (feature or bug), size
    (S/M/L), dependencies, and 3–7 acceptance criteria written so a test can
    prove them (Given/When/Then or a checkable statement). Cover the happy
    path, at least one negative path, and the edge cases that matter (empty,
@@ -31,8 +33,9 @@ Write `docs/ideas/<ID>/brief.md` (the lead gives you the ID) from
    privacy needs get their own criteria. Stories follow INVEST. One story =
    one PR. Split anything bigger than about a day of work.
 5. **Triggers**: does it change the data model, access rules, an
-   integration or the data flow (architect needed)? Does a user see it
-   (designer needed)? Does it touch auth, payments or personal data (flag
+   integration or the data flow (architect needed)? Does a user see it?
+   Write that one exactly as `Designer needed (a user sees it): yes` or
+   `: no` — the design gate reads it. Does it touch auth, payments or personal data (flag
    for the approver)?
 6. **Assumptions**: decisions you made so work can continue.
 7. **Questions for the approver**: only ones you cannot decide yourself:

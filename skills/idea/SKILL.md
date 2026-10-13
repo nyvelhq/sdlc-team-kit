@@ -21,21 +21,26 @@ stop and tell the approver to run `/sdlc-team-kit:kit-init`.
    the folder `docs/ideas/<ID>/`. If it returns *blocking* questions for the
    approver, ask them now (all at once, numbered, each with your recommended
    answer) and stop until they answer.
-3. **Size it** (S/M/L, `SDLC.md`) and say which stages you'll skip and why.
-4. **Design, before anything technical:** if a person will see the change,
+3. **Brief review:** run `qa-engineer` in brief-review mode with only the
+   brief path (not the analyst's reasoning). On FAIL, send its blocking
+   issues back to `requirements-analyst` and review again; after two failed
+   rounds, stop and put the open issues to the approver. Record the result
+   under **Brief review** in the brief.
+4. **Size it** (S/M/L, `SDLC.md`) and say which stages you'll skip and why.
+5. **Design, before anything technical:** if a person will see the change,
    run `product-designer` with the brief.
    - M and L ideas: it returns after pass 2a (flows and screens map). Show
      the approver the canvas link and a short summary and wait for "go on"
      or changes; then run `product-designer` again for 2b and 2c.
    - New product or app: after 2b it returns two or three visual
      directions. Ask the approver to pick one, then run it again to finish.
-5. **Architecture:** if the brief's triggers say so, run `architect` with
+6. **Architecture:** if the brief's triggers say so, run `architect` with
    the brief and the design link (it works from the flows).
-6. **Record:** add each story to `docs/agent/STATUS.md`'s queue as
+7. **Record:** add each story to `docs/agent/STATUS.md`'s queue as
    "awaiting design approval" (or "ready" for S-size or no-UI stories). Put
    the brief, ADR and STATUS changes on branch `claude/<ID>-brief` and open
    a draft PR titled `<ID>: brief and design` so the plan is reviewable.
-7. **Report to the approver,** short: the stories with sizes, the canvas
+8. **Report to the approver,** short: the stories with sizes, the canvas
    link, the key design decisions, assumptions made, non-blocking
    questions, and what to do next: comment on the canvas or reply, then
    `/design <ID>` to revise or `/design <ID> approve`, then `/build <ID>.1`.
