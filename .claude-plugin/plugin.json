@@ -1,0 +1,12 @@
+{
+  "name": "sdlc-team-kit",
+  "displayName": "SDLC Team Kit",
+  "version": "0.1.0",
+  "description": "A virtual SDLC team for Claude Code: role agents (PM, BA, architect, engineer, QA, security, DevOps) plus phase skills that produce PRDs, user stories, ADRs, test plans, defect reports, risk registers, release checklists, status reports, runbooks, and postmortems from shared templates.",
+  "author": {
+    "name": "Nyvel",
+    "url": "https://github.com/nyvelhq"
+  },
+  "repository": "https://github.com/nyvelhq/sdlc-team-kit",
+  "keywords": ["sdlc", "qa", "testing", "product-management", "templates", "agents"]
+}
