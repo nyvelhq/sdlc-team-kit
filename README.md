@@ -86,6 +86,21 @@ Reviewers and QA get the story and the branch, never the engineer's reasoning.
 | `.github/ISSUE_TEMPLATE/idea.yml` | GitHub Idea issue form that feeds `/idea` |
 | `.claude/skills/` | Short aliases for the plugin's skills |
 
+## Guardrails enforced by code
+
+Prompts are advice; these hold even if an agent ignores its instructions. The plugin ships a `PreToolUse` hook (`hooks/hooks.json` → `scripts/guard.mjs`, Node only, no dependencies) that blocks:
+
+| Blocked | Why |
+|---|---|
+| `git push` to `main`, `master`, `staging`, `production` or the remote default branch; commits made directly on them; any force-push | Only `claude/<id>` branches and PRs; the approver merges |
+| Creating a story branch `claude/<ID>.<n>` when the brief needs a design and its last approval line isn't for the current `**Version:**` | Gate 1 — no code before design approval |
+| Writing `.env*` (except `.env.example`), `*.pem`, `*.key`, SSH keys, `secrets/` | Agents never write secrets |
+| Editing a bug's failing test listed in `.claude/sdlc-locks/tests` | Fix the code, not the test |
+
+`kit-init` adds matching permission deny rules in `.claude/settings.json`. Also turn on GitHub branch protection for the default branch (require a PR and passing checks): the hooks match the commands agents normally write and are a guardrail, not a security boundary.
+
+You can check the design gate by hand: `node <plugin>/scripts/gate.mjs SHOP-01.1` prints `GATE OPEN` or `GATE CLOSED` with the reason.
+
 ## The rules that don't bend
 
 - **Two human gates.** No code for a UI story without a recorded design approval for the current version; no merge except by the approver.
@@ -99,8 +114,11 @@ Reviewers and QA get the story and the branch, never the engineer's reasoning.
 - Draft PRs and CI checks use GitHub.
 - Every stage is a model run. An M-size idea runs six or seven agents; use the sizing table rather than the full pipeline for a typo.
 
-## Validate
+## Develop the kit
 
 ```bash
-claude plugin validate . --strict
+claude plugin validate . --strict   # manifest and marketplace
+node --test tests/guard.test.mjs    # hook and design-gate behaviour
 ```
+
+Bump `version` in `.claude-plugin/plugin.json` on every release; installed copies only update when it changes.

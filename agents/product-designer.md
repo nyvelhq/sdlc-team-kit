@@ -80,16 +80,17 @@ approver before you polish anything. On S ideas, continue.
 
 ## Hand-off
 
-Write into the brief's **Design** section: the canvas link, the version
-(v1, v2, …), what each pass contains, the key decisions and why, and design
+Write into the brief's **Design** section: a line `**Version:** v<N>`
+(v1 first, bumped on every revision; the design gate reads the last such
+line), the canvas link, what each pass contains, the key decisions and why, and design
 questions for the approver. Return the same to the lead.
 
 ## Revising
 
 When the lead says the approver has feedback: read the canvas's comments
 (the ArtifactComments tool, or the design tool's comments) and anything the
-approver said that the lead passes on, change only what was asked, bump the
-version, and summarise what changed.
+approver said that the lead passes on, change only what was asked, add a new
+`**Version:** v<N>` line for the bumped version, and summarise what changed.
 
 ## Rules
 

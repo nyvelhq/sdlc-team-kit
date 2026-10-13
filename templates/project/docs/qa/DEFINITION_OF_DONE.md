@@ -15,13 +15,15 @@ you what to check.
       criteria — no drive-by refactors, no speculative abstractions.
 - [ ] No secrets, tokens, or real credentials in the diff (check `.env`
       files and anything that looks like a key before committing).
+- [ ] New or changed library and API calls were checked against the
+      official docs for the pinned version.
 
 ## If it fixes a bug
 
-- [ ] There's a test that fails against the old code and passes against
-      the fix. Prove it: temporarily reintroduce the bug, watch the new
-      test fail, then revert — don't just assume the test would have
-      caught it.
+- [ ] The failing test was committed on its own first and shown to fail
+      (command and output in the PR), then left unchanged while the fix was
+      made (`git diff <test-commit> HEAD -- <test files>` is empty). It
+      passes on the fix.
 - [ ] The root cause is documented (in the PR description or a code
       comment), not just the symptom.
 

@@ -38,6 +38,7 @@ This installs:
 | `docs/qa/templates/defect-report.md`, `docs/qa/templates/qa-status-report.md` | Bug report and QA status templates |
 | `docs/ops/templates/release-checklist.md`, `docs/ops/templates/postmortem.md` | Release checklist with rollback, blameless postmortem |
 | `.github/pull_request_template.md` | PR template with evidence and approver sections |
+| `.claude/settings.json` | Permission deny rules backing the hard rules |
 | `.github/ISSUE_TEMPLATE/idea.yml` | GitHub Idea issue form that feeds `/idea` |
 | `.claude/skills/{idea,design,build,log-defect,release-check,qa-status}/SKILL.md` | Short aliases so these work without the `sdlc-team-kit:` prefix |
 
@@ -45,7 +46,21 @@ If the repo already has a skill with one of those names, it is skipped; tell
 the user that name will run their existing skill and the kit's version is
 `/sdlc-team-kit:<name>`.
 
-## 2. Fill in CLAUDE.md
+## 2. Guardrails
+
+- `.claude/settings.json` holds permission deny rules (force-push, push to
+  `main`/`master`, `git reset --hard`, editing `.env`/key files). If the
+  repo already had a `.claude/settings.json` (so the copy skipped it), show
+  the user the kit's `permissions.deny` entries and offer to merge them in;
+  don't merge without a yes.
+- Append `.claude/sdlc-locks/` to `.gitignore` if it isn't there (create
+  `.gitignore` if needed). It holds the temporary test lock used by `/build`
+  for bug fixes.
+- The plugin's own hooks (protected branches, design gate, secrets, locked
+  tests) need `node` on the PATH, which Claude Code already requires. Check
+  with `node --version`.
+
+## 3. Fill in CLAUDE.md
 
 If `CLAUDE.md` was just created, replace its `<...>` placeholders using
 what you can verify in the repo:
@@ -63,7 +78,7 @@ If `CLAUDE.md` already existed, don't rewrite it. Show the user the kit's
 sections (`Approver`, `User roles`, `Commands`, `Design`, `Project rules`)
 that their file lacks and offer to append them.
 
-## 3. Report
+## 4. Report
 
 List created and skipped files, the placeholders still to fill in
 `CLAUDE.md`, and the next step: commit these files, then

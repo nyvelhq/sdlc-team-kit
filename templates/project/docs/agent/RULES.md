@@ -34,7 +34,11 @@ Add these only when triggered:
 
 ## Hard rules
 
-- Never push to or merge into the default branch. Only use `claude/`
+The ones marked † are also enforced by the plugin's hooks (see "What is
+enforced" in `SDLC.md`). If a hook blocks you, don't look for a way around
+it: fix the cause or stop and report.
+
+- † Never push to or merge into the default branch. Only use `claude/`
   branches and PRs. Never label a PR `hotfix` yourself.
 - If `CLAUDE.md` says staging mode is on, base `claude/` branches on
   `staging` and open PRs against it.
@@ -43,12 +47,16 @@ Add these only when triggered:
 - If a change touches auth or access rules in a way CI can't verify, stop
   and report instead of guessing.
 - Report honestly: mark anything you inferred rather than verified.
-- Never write code for a UI story whose brief has no design approval line,
+- † Never write code for a UI story whose brief has no design approval line,
   and never write that line without the approver's own words approving it.
   An approval is for one design version; a later change needs a new one.
+- † For a bug, the failing test is committed first and not edited while
+  the fix is made; change the code, not the test.
+- Check new library and API calls against the official docs for the
+  version the project pins; never write an API from memory.
 - Never report something as passed without evidence: a green CI check on
   the PR's latest commit, a named test, or an observed result. A missing,
   pending or unknown result is **blocked**, not passed, and the PR says so.
-- Never put secrets, tokens or real credentials in code, docs or commits.
+- † Never put secrets, tokens or real credentials in code, docs or commits.
 - Check for an open PR on an item before starting it, not just at the top of
   a run; another session may have opened one.

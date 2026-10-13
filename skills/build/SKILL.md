@@ -10,18 +10,30 @@ Read `CLAUDE.md`, `docs/agent/RULES.md`, `docs/agent/SDLC.md` and
 `docs/ideas/<ID>/brief.md`. The approver is the person named in `CLAUDE.md`.
 Agents may be listed as `sdlc-team-kit:<name>`.
 
-1. **Check the gate.** The story exists and is "ready". If it has UI, the
-   brief's **Approval** section must record approval of the current design
-   version; if not, stop and send the approver the canvas link instead.
-   Check no open PR already covers this story.
+1. **Check the gate.** Run `node "${CLAUDE_PLUGIN_ROOT}/scripts/gate.mjs" <story-id>`.
+   `GATE CLOSED` means stop: send the approver the reason and the canvas
+   link. (The plugin's hook also refuses to create the `claude/<story-id>`
+   branch while the gate is closed.) Check the story is "ready" and that no
+   open PR already covers it.
 2. **Base branch:** the one `CLAUDE.md` names (for example `staging` when
    staging mode is on), else the default branch. Create `claude/<story-id>`
    from it.
 3. **Engineer:** run `engineer` with the story, the brief path, the ADR (if
    any), the design link and the branch.
+   **Bug stories (Type: bug) go test-first, in two steps:**
+   a. Run `engineer` to write only the failing test(s) that reproduce the
+      bug, and commit them alone. Run the test yourself and confirm it
+      fails for the reason in the bug report; record the command and output.
+      If it passes, the bug isn't reproduced: stop and report.
+   b. Lock those test files: write their repo-relative paths, one per line,
+      to `.claude/sdlc-locks/tests` (gitignored; the plugin's hook then
+      blocks edits to them). Run `engineer` again for the fix, telling it the
+      tests are locked and the code must change, not the test. When QA has
+      passed, delete the lock file. Pass the test commit's SHA to the
+      reviewers and QA.
 4. **Review, in parallel:** run `code-reviewer` and `security-reviewer`
-   with only the story, the brief path, the base and the branch, not the
-   engineer's report. Send blocker and major findings back to `engineer`;
+   with only the story, the brief path, the base and the branch (and, for a
+   bug, the failing-test commit SHA), not the engineer's report. Send blocker and major findings back to `engineer`;
    then review again. Stop after two rounds and carry what's left into the
    PR.
 5. **QA:** run `qa-engineer` with the story, brief path, design link, base
