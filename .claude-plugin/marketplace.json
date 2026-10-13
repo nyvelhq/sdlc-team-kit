@@ -1,0 +1,15 @@
+{
+  "name": "nyvel",
+  "description": "Nyvel plugins for Claude Code",
+  "owner": {
+    "name": "Nyvel",
+    "url": "https://github.com/nyvelhq"
+  },
+  "plugins": [
+    {
+      "name": "sdlc-team-kit",
+      "source": "./",
+      "description": "Design-first agent team with two human gates (design approval, merge) and evidence-based QA."
+    }
+  ]
+}
